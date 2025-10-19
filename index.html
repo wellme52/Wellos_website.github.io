@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WellOS - Modern Linux İşletim Sistemi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hover-scale {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 3s ease-in-out infinite;
+            position: relative;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.6), 
+                           0 0 60px rgba(102, 126, 234, 0.3),
+                           inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(102, 126, 234, 0.9), 
+                           0 0 100px rgba(102, 126, 234, 0.5),
+                           inset 0 0 30px rgba(255, 255, 255, 0.2);
+            }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .card-gradient {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .download-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .download-card:hover::before {
+            left: 100%;
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            background: rgba(102, 126, 234, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gray-900 text-white font-sans">
+    <header class="gradient-bg relative z-50">
+        <nav class="container mx-auto px-6 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 floating">
+                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+                        <span class="text-2xl font-bold text-gradient">W</span>
+                    </div>
+                    <div>
+                        <span class="text-3xl font-bold">WellOS</span>
+                        <div class="text-xs text-purple-200 -mt-1">Modern Linux Experience</div>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="glass-effect px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">Ana Sayfa</a>
+                    <a href="#features" class="glass-effect px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">Özellikler</a>
+                    <a href="#download" class="glass-effect px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">İndir</a>
+                    <a href="#about" class="glass-effect px-4 py-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">Hakkında</a>
+                </div>
+                <button class="md:hidden glass-effect p-3 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="gradient-bg py-32 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-gray-900/40"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <div class="fade-in">
+                    <div class="mb-8">
+                        <div class="inline-block glass-effect px-6 py-2 rounded-full mb-6">
+                            <span class="text-sm font-medium">🚀 Yeni Sürüm Çıktı - WellOS 1.0 PRO</span>
+                        </div>
+                    </div>
+                    <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+                        <span class="text-gradient">WellOS</span>
+                        <span class="block text-4xl md:text-5xl font-light mt-4 text-white/90">
+                            Geleceğin Linux Deneyimi
+                        </span>
+                    </h1>
+                    <p class="text-xl md:text-2xl mb-12 max-w-4xl mx-auto text-white/80 leading-relaxed">
+                        Ubuntu ve Zorin OS tabanlı, modern tasarım ve kullanıcı dostu arayüz ile 
+                        <span class="text-gradient font-semibold">güçlü, güvenli ve tamamen ücretsiz</span> işletim sistemi deneyimi.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                        <a href="#download" class="group bg-white text-purple-600 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-purple-50 transition-all duration-300 hover-scale pulse-glow shadow-2xl">
+                            <span class="flex items-center space-x-3">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                <span>Şimdi İndir</span>
+                            </span>
+                        </a>
+                        <a href="#features" class="glass-effect px-10 py-5 rounded-2xl font-semibold text-lg hover:bg-white hover:bg-opacity-20 transition-all duration-300 hover-scale">
+                            <span class="flex items-center space-x-3">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span>Özellikleri Keşfet</span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-white mb-2">3</div>
+                            <div class="text-sm text-white/70">Aktif Sürüm</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-white mb-2">100%</div>
+                            <div class="text-sm text-white/70">Açık Kaynak</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-white mb-2">0₺</div>
+                            <div class="text-sm text-white/70">Tamamen Ücretsiz</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-white mb-2">24/7</div>
+                            <div class="text-sm text-white/70">Topluluk Desteği</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-24 bg-gradient-to-b from-gray-900 to-gray-800 relative">
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-900/10 via-transparent to-blue-900/10"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-20">
+                    <h2 class="text-5xl md:text-6xl font-bold mb-6">
+                        <span class="text-gradient">Neden WellOS?</span>
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        Modern teknoloji ile geleneksel Linux gücünü birleştiren özellikleri keşfedin
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-10">
+                    <div class="card-gradient p-10 rounded-3xl hover-scale group">
+                        <div class="feature-icon w-20 h-20 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-6 text-white">Yüksek Performans</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed">Ubuntu ve Zorin OS'un güçlü altyapısı üzerine inşa edilmiş, optimize edilmiş performans ve hızlı başlangıç süreleri.</p>
+                        <div class="mt-6 flex items-center text-purple-400">
+                            <span class="text-sm font-semibold">Daha fazla bilgi</span>
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card-gradient p-10 rounded-3xl hover-scale group">
+                        <div class="feature-icon w-20 h-20 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-6 text-white">Güvenli & Kararlı</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed">Gelişmiş güvenlik özellikleri, otomatik güncellemeler ve kararlı Linux çekirdeği ile güvenilir deneyim.</p>
+                        <div class="mt-6 flex items-center text-green-400">
+                            <span class="text-sm font-semibold">Daha fazla bilgi</span>
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card-gradient p-10 rounded-3xl hover-scale group">
+                        <div class="feature-icon w-20 h-20 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-6 text-white">Kullanıcı Dostu</h3>
+                        <p class="text-gray-300 text-lg leading-relaxed">Modern arayüz tasarımı, kolay kurulum ve sezgisel kullanım ile hem yeni başlayanlar hem de uzmanlar için ideal.</p>
+                        <div class="mt-6 flex items-center text-blue-400">
+                            <span class="text-sm font-semibold">Daha fazla bilgi</span>
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="download" class="py-20 bg-gray-900">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16">WellOS'u İndir</h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                    <!-- Beta Version -->
+                    <div class="download-card bg-gradient-to-br from-purple-600 to-blue-600 p-8 rounded-3xl text-center hover-scale">
+                        <div class="bg-white bg-opacity-20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">WellOS Beta</h3>
+                        <p class="text-purple-100 mb-2 text-base">Ubuntu Tabanlı</p>
+                        <p class="text-sm text-purple-200 mb-6">En son özellikler ve güncellemeler</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Modern Cinnamon Masaüstü</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Özel WellOS Temaları</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Gelişmiş Güvenlik</span>
+                            </div>
+                        </div>
+                        <button onclick="downloadBeta()" class="w-full bg-white text-purple-600 py-3 px-6 rounded-xl font-bold hover:bg-gray-100 transition-colors text-base">
+                            Beta İndir (2.1 GB)
+                        </button>
+                        <p class="text-sm text-purple-200 mt-3">Sürüm: 1.0-beta | Çıkış: 1 Ekim 2025</p>
+                    </div>
+
+                    <!-- Lite Version -->
+                    <div class="download-card bg-gradient-to-br from-green-600 to-teal-600 p-8 rounded-3xl text-center hover-scale">
+                        <div class="bg-white bg-opacity-20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">WellOS 1.0 Lite</h3>
+                        <p class="text-green-100 mb-2 text-base">Ubuntu Tabanlı</p>
+                        <p class="text-sm text-green-200 mb-6">Düşük seviyeli cihazlar için optimize edilmiş</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Hafif XFCE Masaüstü</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Düşük RAM Kullanımı</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Eski Donanım Desteği</span>
+                            </div>
+                        </div>
+                        <button onclick="downloadLite()" class="w-full bg-white text-green-600 py-3 px-6 rounded-xl font-bold hover:bg-gray-100 transition-colors text-base">
+                            Lite İndir (1.8 GB)
+                        </button>
+                        <p class="text-sm text-green-200 mt-3">Sürüm: 1.0 | Çıkış: 20 Ekim 2025</p>
+                    </div>
+
+                    <!-- Pro Version -->
+                    <div class="download-card bg-gradient-to-br from-yellow-500 to-orange-600 p-8 rounded-3xl text-center hover-scale relative">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white text-sm px-3 py-1 rounded-full font-bold shadow-lg">
+                            ÖNERİLEN
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">WellOS 1.0 PRO</h3>
+                        <p class="text-yellow-100 mb-2 text-base">GNOME Masaüstü - Zorin OS Tabanlı</p>
+                        <p class="text-sm text-yellow-200 mb-2">Modern GNOME deneyimi ve premium özellikler</p>
+                        <p class="text-sm text-yellow-300 mb-6 italic">* Zorin OS'dan ilham alınmıştır</p>
+                        <div class="space-y-3 mb-8">
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">GNOME 45+ Masaüstü</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Premium Uygulamalar</span>
+                            </div>
+                            <div class="flex items-center justify-center space-x-3">
+                                <svg class="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-sm">Gelişmiş Özelleştirme</span>
+                            </div>
+                        </div>
+                        <button onclick="downloadPro()" class="w-full bg-white text-orange-600 py-3 px-6 rounded-xl font-bold hover:bg-gray-100 transition-colors text-base">
+                            PRO İndir (3.2 GB)
+                        </button>
+                        <p class="text-sm text-yellow-200 mt-3">Sürüm: 1.0 | Çıkış: 16 Ekim 2025</p>
+                    </div>
+                </div>
+
+                <!-- Coming Soon Versions -->
+                <div class="mt-16">
+                    <h3 class="text-3xl font-bold text-center mb-12 text-gradient">Yakında Gelecek Sürümler</h3>
+                    <div class="grid md:grid-cols-1 gap-8 max-w-2xl mx-auto">
+                        <!-- Education Version -->
+                        <div class="card-gradient p-8 rounded-3xl text-center hover-scale opacity-75">
+                            <div class="bg-gradient-to-br from-indigo-600 to-purple-600 bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                                <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-bold mb-3 text-white">WellOS 1.0 Eğitim</h4>
+                            <p class="text-gray-300 mb-2">Ubuntu Tabanlı</p>
+                            <p class="text-sm text-gray-400 mb-4">Eğitim kurumları için özel sürüm</p>
+                            <div class="space-y-2 mb-6">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <span class="text-xs text-gray-400">• Eğitim Uygulamaları</span>
+                                </div>
+                                <div class="flex items-center justify-center space-x-2">
+                                    <span class="text-xs text-gray-400">• Öğrenci Yönetimi</span>
+                                </div>
+                                <div class="flex items-center justify-center space-x-2">
+                                    <span class="text-xs text-gray-400">• Güvenli İnternet</span>
+                                </div>
+                            </div>
+                            <button class="w-full bg-gray-600 text-gray-300 py-2 px-4 rounded-xl font-semibold cursor-not-allowed">
+                                Geliştiriliyor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Notice -->
+                <div class="mt-12 bg-red-900 border border-red-700 p-6 rounded-xl max-w-4xl mx-auto">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                        <h3 class="text-xl font-bold text-red-300">Önemli Destek Bilgisi</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 text-sm">
+                        <div class="bg-red-800 bg-opacity-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-200 mb-2">Beta Sürüm (1.0-beta)</h4>
+                            <p class="text-red-100">2027 yılına kadar güvenlik güncellemeleri ve destek alacaktır.</p>
+                        </div>
+                        <div class="bg-red-800 bg-opacity-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-200 mb-2">PRO Sürüm (1.0)</h4>
+                            <p class="text-red-100">Destek almayacaktır. Sadece tek seferlik yayın olarak sunulmaktadır.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Requirements -->
+                <div class="mt-16 bg-gray-800 p-8 rounded-xl max-w-2xl mx-auto">
+                    <h3 class="text-2xl font-bold mb-6 text-center">Sistem Gereksinimleri</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-3 text-purple-400">Minimum</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li>• İşlemci: 64-bit dual-core</li>
+                                <li>• RAM: 2 GB</li>
+                                <li>• Depolama: 20 GB</li>
+                                <li>• Grafik: 1024x768 çözünürlük</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 text-green-400">Önerilen</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li>• İşlemci: 64-bit quad-core</li>
+                                <li>• RAM: 4 GB veya üzeri</li>
+                                <li>• Depolama: 50 GB SSD</li>
+                                <li>• Grafik: 1920x1080 çözünürlük</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-4xl font-bold mb-8">WellOS Hakkında</h2>
+                    <p class="text-xl text-gray-300 mb-8">
+                        WellOS, Ubuntu'nun güçlü temelini modern tasarım ve kullanıcı deneyimi ile birleştiren 
+                        yenilikçi bir işletim sistemidir. Hem yeni başlayanlar hem de deneyimli kullanıcılar için 
+                        tasarlanmış olan WellOS, açık kaynak felsefesini benimser ve sürekli gelişim halindedir.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-8 mt-12">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-purple-400 mb-2">100%</div>
+                            <div class="text-gray-400">Açık Kaynak</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-400 mb-2">0₺</div>
+                            <div class="text-gray-400">Tamamen Ücretsiz</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-400 mb-2">24/7</div>
+                            <div class="text-gray-400">Topluluk Desteği</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12 border-t border-gray-700">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-lg font-bold text-white">W</span>
+                        </div>
+                        <span class="text-xl font-bold">WellOS</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Modern Linux deneyimi için tasarlanmış işletim sistemi.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Ürün</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#download" class="hover:text-white transition-colors">İndir</a></li>
+                        <li><a href="#features" class="hover:text-white transition-colors">Özellikler</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Sürüm Notları</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Destek</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Dokümantasyon</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Forum</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">İletişim</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Topluluk</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2024 WellOS. Tüm hakları saklıdır. Ubuntu tabanlı açık kaynak proje.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Download Modal -->
+    <div id="downloadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-2xl max-w-md mx-4">
+            <h3 class="text-2xl font-bold mb-4" id="modalTitle">İndirme Başlıyor</h3>
+            <p class="text-gray-300 mb-6" id="modalText">İndirme işlemi başlatılıyor...</p>
+            <div class="flex space-x-4">
+                <button onclick="closeModal()" class="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                    Kapat
+                </button>
+                <button onclick="confirmDownload()" class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                    İndir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDownload = '';
+
+        function downloadBeta() {
+            currentDownload = 'beta';
+            document.getElementById('modalTitle').textContent = 'WellOS Beta İndir';
+            document.getElementById('modalText').textContent = 'WellOS Beta sürümünü (2.1 GB) indirmek istediğinizden emin misiniz? Bu sürüm Ubuntu tabanlıdır ve test amaçlıdır.';
+            document.getElementById('downloadModal').classList.remove('hidden');
+            document.getElementById('downloadModal').classList.add('flex');
+        }
+
+        function downloadLite() {
+            currentDownload = 'lite';
+            document.getElementById('modalTitle').textContent = 'WellOS 1.0 Lite İndir';
+            document.getElementById('modalText').textContent = 'WellOS 1.0 Lite sürümünü (1.8 GB) indirmek istediğinizden emin misiniz? Bu sürüm düşük seviyeli cihazlar için optimize edilmiştir.';
+            document.getElementById('downloadModal').classList.remove('hidden');
+            document.getElementById('downloadModal').classList.add('flex');
+        }
+
+
+
+        function downloadPro() {
+            currentDownload = 'pro';
+            document.getElementById('modalTitle').textContent = 'WellOS 1.0 PRO İndir';
+            document.getElementById('modalText').textContent = 'WellOS 1.0 PRO sürümünü (GNOME masaüstü) indirmek istediğinizden emin misiniz? Google Drive üzerinden indirme başlatılacak.';
+            document.getElementById('downloadModal').classList.remove('hidden');
+            document.getElementById('downloadModal').classList.add('flex');
+        }
+
+        function confirmDownload() {
+            if (currentDownload === 'beta') {
+                // Beta indirme - Google Drive bağlantısı
+                window.open('https://drive.google.com/file/d/1KfdxONpB6NzYBm06a3dkkvIyL7xpC5ZS/view', '_blank', 'noopener,noreferrer');
+                document.getElementById('modalText').textContent = 'İndirme sayfası yeni sekmede açıldı. WellOS Beta sürümünü Google Drive üzerinden indirebilirsiniz.';
+                setTimeout(() => {
+                    closeModal();
+                }, 3000);
+            } else if (currentDownload === 'lite') {
+                // Lite sürüm indirme - Google Drive bağlantısı
+                window.open('https://drive.google.com/file/d/1UJqy7WmTo4GwpZhCporlG3sIgimccC99/view?usp=drivesdk', '_blank', 'noopener,noreferrer');
+                document.getElementById('modalText').textContent = 'İndirme sayfası yeni sekmede açıldı. WellOS 1.0 Lite sürümünü Google Drive üzerinden indirebilirsiniz.';
+                setTimeout(() => {
+                    closeModal();
+                }, 3000);
+            } else if (currentDownload === 'pro') {
+                // Pro sürüm indirme - Google Drive bağlantısı
+                window.open('https://drive.google.com/file/d/1l-x9Drz5Dy6dfWam6Hdu7726m653Cywm/view?usp=drivesdk', '_blank', 'noopener,noreferrer');
+                document.getElementById('modalText').textContent = 'İndirme sayfası yeni sekmede açıldı. WellOS 1.0 PRO (GNOME) sürümünü Google Drive üzerinden indirebilirsiniz.';
+                setTimeout(() => {
+                    closeModal();
+                }, 3000);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').classList.add('hidden');
+            document.getElementById('downloadModal').classList.remove('flex');
+            // İndir butonunu tekrar göster
+            document.querySelector('button[onclick="confirmDownload()"]').style.display = 'block';
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('downloadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990e6f4ea13ef26b',t:'MTc2MDg1NzYwNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
